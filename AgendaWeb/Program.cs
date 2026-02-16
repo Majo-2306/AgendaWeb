@@ -12,6 +12,9 @@ namespace AgendaWeb
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
+            var connectionString = builder.Configuration
+                    .GetConnectionString("DefaultConnection");
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
