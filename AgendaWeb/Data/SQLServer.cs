@@ -11,11 +11,11 @@ namespace AgendaWeb.Data
             _connectionString = connectionString;
         }
 
-        public int NonQuery(string query, SqlParameter[] parameters= null ) 
+        public int NonQuery(string query, SqlParameter[] parameters = null)
         {
-            using (SqlConnection connection= new SqlConnection(_connectionString)) 
+            using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                using (SqlCommand command = new SqlCommand(query, connection)) 
+                using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     if (parameters != null)
                     {
@@ -23,6 +23,24 @@ namespace AgendaWeb.Data
                     }
                     connection.Open();
                     return command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public T? Scalar<T>(string query, SqlParameter[]? parameters = null)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    if (parameters != null)
+                    {
+                        command.Parameters.AddRange(parameters);
+                    }
+                    connection.Open();
+                    object respuesta = command.ExecuteScalar();
+                    return respuesta is T value ? value: default;
+
                 }
             }
         }
