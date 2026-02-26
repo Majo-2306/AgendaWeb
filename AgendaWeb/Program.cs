@@ -1,4 +1,7 @@
 using AgendaWeb.Components;
+using AgendaWeb.Data;
+using AgendaWeb.Data.Commands;
+using AgendaWeb.Services;
 
 namespace AgendaWeb
 {
@@ -12,10 +15,15 @@ namespace AgendaWeb
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
-            var connectionString = builder.Configuration
-                    .GetConnectionString("DefaultConnection");
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+            //  Inyeccion de dependencias
+            builder.Services.AddScoped<SQLServer>(_ => new SQLServer(connectionString));
+            builder.Services.AddScoped<ContactoCommand>();
+            builder.Services.AddScoped<ContactoServices>();
 
             var app = builder.Build();
+
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
